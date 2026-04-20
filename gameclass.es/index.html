@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GAMECLASS - Inicio</title>
+  <!-- Cargamos Tailwind desde CDN y personalizamos colores para la marca -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gc: {
+              bg: '#f8fafc',
+              surface: '#ffffff',
+              accent: '#111827',
+              accent2: '#f97316',
+              accent3: '#fde047'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-screen bg-gc-bg text-slate-950">
+  <!-- Cabecera fija con navegación principal hacia secciones separadas -->
+  <header class="sticky top-0 z-50 border-b-4 border-slate-950/90 bg-gc-bg/95 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div class="flex items-center gap-4">
+        <div class="grid h-14 w-14 place-items-center border-4 border-slate-950 bg-slate-950 text-white">GC</div>
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-[0.35em] text-slate-500">GAMECLASS</p>
+          <p class="text-sm font-semibold">Desarrolladora de videojuegos</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <nav class="flex flex-wrap items-center gap-3">
+          <a href="index.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Inicio</a>
+          <a href="quienes-somos.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Quiénes somos</a>
+          <a href="servicios.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Servicios</a>
+          <a href="clientes.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Área de clientes</a>
+          <a href="contacto.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Contacto</a>
+        </nav>
+        <button id="theme-toggle" type="button" class="theme-toggle-button">Oscuro</button>
+      </div>
+    </div>
+  </header>
+  <main class="mx-auto max-w-7xl px-6 py-10">
+    <section class="grid gap-8 xl:grid-cols-[1.4fr_0.9fr] animate-entry">
+      <article class="space-y-8 border-4 border-slate-950 bg-slate-50 p-10 shadow-[20px_20px_0_rgba(17,24,39,0.12)]">
+        <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent2">Bienvenid@</span>
+        <div class="space-y-6">
+          <h1 class="text-5xl font-black uppercase tracking-tight text-slate-950">CONVIERTE TU IDEA EN UN VIDEOJUEGO REAL</h1>
+          <p class="max-w-2xl text-lg text-slate-700">Transformamos conceptos en experiencias jugables.
+Desde la idea inicial hasta el lanzamiento, te acompañamos en todo el proceso.</p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-none border-4 border-slate-950 bg-white p-6">
+            <p class="text-xs uppercase tracking-[0.35em] text-slate-500">Hora actual</p>
+            <p id="current-time" class="mt-4 text-4xl font-bold">--:--:--</p>
+          </div>
+          <div class="rounded-none border-4 border-slate-950 bg-white p-6">
+            <p class="text-xs uppercase tracking-[0.35em] text-slate-500">Clima</p>
+            <div class="mt-4 flex items-center gap-4">
+              <div id="weather-icon" class="text-5xl">☀️</div>
+              <p id="weather-text" class="text-2xl font-bold">Despejado</p>
+            </div>
+          </div>
+        </div>
+      </article>
+      <aside class="border-4 border-slate-950 bg-slate-950 p-10 text-white shadow-[20px_20px_0_rgba(255,255,255,0.14)]">
+        <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent3">GAMECLASS</span>
+        <h2 class="mt-6 text-4xl font-black">¿Tienes una idea para un videojuego pero no sabes por dónde empezar?</h2>
+        <p class="mt-4 text-slate-200">Nosotros ponemos el equipo, la tecnología y la experiencia.
+Tú solo necesitas la visión.</p>
+      </aside>
+    </section>
+
+    <section class="mt-12 grid gap-8 animate-entry">
+      <div class="grid gap-6 md:grid-cols-3">
+        <div class="rounded-none border-4 border-slate-950 bg-white p-8 shadow-[18px_18px_0_rgba(17,24,39,0.1)]">
+          <h3 class="text-xl font-black uppercase tracking-[0.15em]">Experiencia de juego</h3>
+          <p class="mt-4 text-slate-700">Creamos sistemas de juego sólidos y una interfaz optimizada para garantizar una interacción clara, fluida y envolvente.</p>
+        </div>
+        <div class="rounded-none border-4 border-slate-950 bg-white p-8 shadow-[18px_18px_0_rgba(17,24,39,0.1)]">
+          <h3 class="text-xl font-black uppercase tracking-[0.15em]">Tecnología de última generación</h3>
+          <p class="mt-4 text-slate-700">Utilizamos las últimas herramientas y tecnologías para crear experiencias de juego innovadoras y envolventes.</p>
+        </div>
+        <div class="rounded-none border-4 border-slate-950 bg-white p-8 shadow-[18px_18px_0_rgba(17,24,39,0.1)]">
+          <h3 class="text-xl font-black uppercase tracking-[0.15em]">Soporte pro</h3>
+          <p class="mt-4 text-slate-700">Ofrecemos asistencia técnica y soporte continuo para garantizar el éxito de tu proyecto de videojuego.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t-4 border-slate-950 bg-white px-6 py-8 text-center text-sm font-semibold uppercase tracking-[0.2em] text-slate-700">
+    © 2026 GAMECLASS. Todos los derechos reservados.
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GAMECLASS - Quiénes somos</title>
+  <!-- Página de presentación de la empresa, con diseño brutalista y estructura clara -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gc: {
+              bg: '#f8fafc',
+              surface: '#ffffff',
+              accent: '#111827',
+              accent2: '#f97316',
+              accent3: '#fde047'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-screen bg-gc-bg text-slate-950">
+  <header class="sticky top-0 z-50 border-b-4 border-slate-950/90 bg-gc-bg/95 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div class="flex items-center gap-4">
+        <div class="grid h-14 w-14 place-items-center border-4 border-slate-950 bg-slate-950 text-white">GC</div>
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-[0.35em] text-slate-500">GAMECLASS</p>
+          <p class="text-sm font-semibold">Desarrolladora de videojuegos</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <nav class="flex flex-wrap items-center gap-3">
+          <a href="index.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Inicio</a>
+          <a href="quienes-somos.html" class="rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white">Quiénes somos</a>
+          <a href="servicios.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Servicios</a>
+          <a href="clientes.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Área de clientes</a>
+          <a href="contacto.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Contacto</a>
+        </nav>
+        <button id="theme-toggle" type="button" class="theme-toggle-button">🌙 Oscuro</button>
+      </div>
+    </div>
+  </header>
+  <main class="mx-auto max-w-7xl px-6 py-10">
+    <section class="animate-entry border-4 border-slate-950 bg-white p-10 shadow-[18px_18px_0_rgba(17,24,39,0.12)]">
+      <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent2">Quiénes somos</span>
+      <h1 class="mt-6 text-4xl font-black uppercase tracking-tight text-slate-950">Quiénes somos</h1>
+      <p class="mt-6 max-w-3xl text-lg text-slate-700">Somos una empresa dedicada al desarrollo de videojuegos, con un equipo de profesionales apasionados por crear experiencias inolvidables para los jugadores.</p>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <div class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Nuestra misión</h2>
+          <p class="mt-4 text-slate-700">Crear videojuegos que inspiren y entusiasmen a los jugadores, ofreciendo experiencias únicas y memorables.</p>
+        </div>
+        <div class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Nuestra visión</h2>
+          <p class="mt-4 text-slate-700">Ser reconocidos como una empresa líder en el desarrollo de videojuegos, con una cultura de innovación y excelencia.</p>
+        </div>
+        <div class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Nuestros valores</h2>
+          <p class="mt-4 text-slate-700">Compromiso, creatividad, colaboración y excelencia en todo lo que hacemos.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t-4 border-slate-950 bg-white px-6 py-8 text-center text-sm font-semibold uppercase tracking-[0.2em] text-slate-700">
+    © 2026 GAMECLASS. Todos los derechos reservados.
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GAMECLASS - Contacto</title>
+  <!-- Página de contacto con formulario y mapa. Ideal para clientes y propuestas -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gc: {
+              bg: '#f8fafc',
+              surface: '#ffffff',
+              accent: '#111827',
+              accent2: '#f97316',
+              accent3: '#fde047'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="min-h-screen bg-gc-bg text-slate-950">
+  <header class="sticky top-0 z-50 border-b-4 border-slate-950/90 bg-gc-bg/95 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
+      <div class="flex items-center gap-4">
+        <div class="grid h-14 w-14 place-items-center border-4 border-slate-950 bg-slate-950 text-white">GC</div>
+        <div class="space-y-1">
+          <p class="text-xs uppercase tracking-[0.35em] text-slate-500">GAMECLASS</p>
+          <p class="text-sm font-semibold">Desarrolladora de videojuegos</p>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <nav class="flex flex-wrap items-center gap-3">
+          <a href="index.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Inicio</a>
+          <a href="quienes-somos.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Quiénes somos</a>
+          <a href="servicios.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Servicios</a>
+          <a href="clientes.html" class="rounded-none border-4 border-slate-950 bg-white px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition duration-200 hover:-translate-y-1 hover:bg-slate-950 hover:text-white">Área de clientes</a>
+          <a href="contacto.html" class="rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white">Contacto</a>
+        </nav>
+        <button id="theme-toggle" type="button" class="theme-toggle-button">🌙 Oscuro</button>
+      </div>
+    </div>
+  </header>
+  <main class="mx-auto max-w-7xl px-6 py-10">
+    <section class="animate-entry grid gap-8 lg:grid-cols-[1.35fr_0.9fr]">
+      <div class="rounded-none border-4 border-slate-950 bg-white p-10 shadow-[18px_18px_0_rgba(17,24,39,0.12)]">
+        <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent2">Contacto</span>
+        <h1 class="mt-6 text-4xl font-black uppercase tracking-tight text-slate-950">Estamos listos para tu proyecto.</h1>
+        <p class="mt-6 max-w-3xl text-lg text-slate-700">Escribe tus dudas o propuestas y te responderemos lo antes posible.</p>
+      </div>
+      <form id="contact-form" class="rounded-none border-4 border-slate-950 bg-slate-50 p-10 shadow-[18px_18px_0_rgba(17,24,39,0.12)] grid gap-6">
+        <label class="grid gap-3 text-sm uppercase tracking-[0.15em] text-slate-500">Nombre
+          <input type="text" id="contact-name" placeholder="Tu nombre" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+        </label>
+        <label class="grid gap-3 text-sm uppercase tracking-[0.15em] text-slate-500">Email
+          <input type="email" id="contact-email" placeholder="ejemplo@correo.com" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+        </label>
+        <label class="grid gap-3 text-sm uppercase tracking-[0.15em] text-slate-500">Mensaje
+          <textarea id="contact-message" placeholder="Escribe tu mensaje" required class="w-full min-h-[200px] border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none"></textarea>
+        </label>
+        <button type="submit" class="rounded-none border-4 border-slate-950 bg-slate-950 px-6 py-3 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Enviar mensaje</button>
+        <p id="contact-feedback" class="text-sm font-semibold"></p>
+      </form>
+    </section>
+    <section class="animate-entry mt-10 rounded-none border-4 border-slate-950 bg-white p-10 shadow-[18px_18px_0_rgba(17,24,39,0.12)]">
+      <h2 class="text-2xl font-black uppercase tracking-[0.15em]">¿Dónde estamos?</h2>
+      <p class="mt-4 text-slate-700">Oficina central en Utrera— accesible a clientes y colaboradores.</p>
+      <div class="mt-8 overflow-hidden border-4 border-slate-950">
+        <iframe
+          title="Mapa de GAMECLASS"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25428.375969145796!2d-5.800432854176837!3d37.187235256337885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd127f0ec1c94487%3A0x6a1c6276d4cb02c0!2s41710%20Utrera%2C%20Sevilla!5e0!3m2!1ses!2ses!4v1776079789597!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen=""
+          loading="lazy"
+          class="h-[24rem] w-full"
+        ></iframe>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t-4 border-slate-950 bg-white px-6 py-8 text-center text-sm font-semibold uppercase tracking-[0.2em] text-slate-700">
+    © 2026 GAMECLASS. Todos los derechos reservados.
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
