@@ -106,26 +106,39 @@ if (loginForm) {
   });
 }
 
-// Manejo del formulario de contacto, muestra mensajes en la interfaz
-if (contactForm) {
-  contactForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const name = document.getElementById('contact-name').value.trim();
-    const email = document.getElementById('contact-email').value.trim();
-    const message = document.getElementById('contact-message').value.trim();
+// Manejo del formulario de contacto
+// Nota: En contacto.html, el formulario se maneja directamente con Firebase en el módulo
+// Este código es para páginas donde el formulario puede no estar conectado
+function handleFallbackContactForm() {
+  const contactFormReady = document.getElementById('contact-form');
+  const contactFeedbackReady = document.getElementById('contact-feedback');
 
-    if (!name || !email || !message) {
-      if (contactFeedback) {
-        contactFeedback.textContent = 'Por favor completa todos los campos.';
-        contactFeedback.className = 'contact-feedback error';
+  if (contactFormReady && !window.contactFormHandledByFirebase) {
+    contactFormReady.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      if (!name || !email || !message) {
+        if (contactFeedbackReady) {
+          contactFeedbackReady.textContent = 'Por favor completa todos los campos.';
+          contactFeedbackReady.className = 'contact-feedback error';
+        }
+        return;
       }
-      return;
-    }
 
-    if (contactFeedback) {
-      contactFeedback.textContent = '¡Gracias! Tu mensaje ha sido enviado correctamente.';
-      contactFeedback.className = 'contact-feedback success';
-    }
-    contactForm.reset();
-  });
+      if (contactFeedbackReady) {
+        contactFeedbackReady.textContent = '¡Gracias! Tu mensaje ha sido enviado correctamente.';
+        contactFeedbackReady.className = 'contact-feedback success';
+      }
+      contactFormReady.reset();
+    });
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', handleFallbackContactForm);
+} else {
+  handleFallbackContactForm();
 }
