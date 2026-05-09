@@ -54,15 +54,32 @@
       <p class="mt-6 max-w-3xl text-lg text-slate-700">Inicia sesión para ver actualizaciones, entregables y recursos exclusivos.</p>
       <div class="mt-10 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
         <div class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <div class="flex mb-6">
+            <button id="login-tab" class="flex-1 border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white">Iniciar Sesión</button>
+            <button id="register-tab" class="flex-1 border-4 border-slate-950 bg-white px-4 py-2 text-sm font-bold uppercase text-slate-950">Registrarse</button>
+          </div>
           <form id="login-form" class="grid gap-5">
-            <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Usuario
-              <input type="text" id="login-user" placeholder="cliente@gc.com" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+            <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Email
+              <input type="email" id="login-user" placeholder="cliente@gc.com" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
             </label>
             <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Contraseña
               <input type="password" id="login-pass" placeholder="********" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
             </label>
             <button type="submit" class="rounded-none border-4 border-slate-950 bg-slate-950 px-6 py-3 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Entrar</button>
             <p id="login-message" class="text-sm font-semibold"></p>
+          </form>
+          <form id="register-form" class="grid gap-5 hidden">
+            <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Nombre
+              <input type="text" id="register-name" placeholder="Tu nombre" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+            </label>
+            <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Email
+              <input type="email" id="register-email" placeholder="tu@email.com" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+            </label>
+            <label class="grid gap-2 text-sm uppercase tracking-[0.15em] text-slate-500">Contraseña
+              <input type="password" id="register-pass" placeholder="********" required class="w-full border-4 border-slate-950 bg-white px-4 py-3 text-slate-950 outline-none" />
+            </label>
+            <button type="submit" class="rounded-none border-4 border-slate-950 bg-slate-950 px-6 py-3 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Registrarse</button>
+            <p id="register-message" class="text-sm font-semibold"></p>
           </form>
         </div>
         <div class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
@@ -71,10 +88,207 @@
         </div>
       </div>
     </section>
+    <section id="services-section" class="animate-entry border-4 border-slate-950 bg-white p-10 shadow-[18px_18px_0_rgba(17,24,39,0.12)] hidden">
+      <div class="flex justify-between items-center mb-6">
+        <div></div>
+        <button id="logout-button" class="rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1" style="display: none;">Cerrar Sesión</button>
+      </div>
+      <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent2">Compra de Servicios</span>
+      <h1 class="mt-6 text-4xl font-black uppercase tracking-tight text-slate-950">Selecciona los servicios que deseas adquirir.</h1>
+      <p class="mt-6 max-w-3xl text-lg text-slate-700">Como cliente registrado, puedes comprar nuestros servicios de desarrollo de videojuegos.</p>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Desarrollo de videojuegos</h2>
+          <p class="mt-4 text-slate-700">Precio: $5000</p>
+          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+        </article>
+        <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Diseño de niveles</h2>
+          <p class="mt-4 text-slate-700">Precio: $2000</p>
+          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+        </article>
+        <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
+          <h2 class="text-xl font-black uppercase tracking-[0.15em]">Marketing de videojuegos</h2>
+          <p class="mt-4 text-slate-700">Precio: $3000</p>
+          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+        </article>
+      </div>
+    </section>
   </main>
   <footer class="border-t-4 border-slate-950 bg-white px-6 py-8 text-center text-sm font-semibold uppercase tracking-[0.2em] text-slate-700">
     © 2026 GAMECLASS. Todos los derechos reservados.
   </footer>
   <script src="script.js"></script>
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDq3-xJKoMurMyj-9bCqUygYtKSq7SBDcA",
+      authDomain: "gameclass-d1314.firebaseapp.com",
+      projectId: "gameclass-d1314",
+      storageBucket: "gameclass-d1314.firebasestorage.app",
+      messagingSenderId: "545936116590",
+      appId: "1:545936116590:web:35714b02ff25eeb67d4f7f"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Elements
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const loginMessage = document.getElementById('login-message');
+    const registerMessage = document.getElementById('register-message');
+    const servicesSection = document.getElementById('services-section');
+    const authSection = document.querySelector('.grid.gap-8');
+    const logoutButton = document.getElementById('logout-button');
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+
+    // Tab switching for login/register
+    if (loginTab && registerTab) {
+      loginTab.addEventListener('click', function() {
+        loginForm.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+        loginTab.classList.add('bg-slate-950', 'text-white');
+        loginTab.classList.remove('bg-white', 'text-slate-950');
+        registerTab.classList.add('bg-white', 'text-slate-950');
+        registerTab.classList.remove('bg-slate-950', 'text-white');
+      });
+      registerTab.addEventListener('click', function() {
+        registerForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        registerTab.classList.add('bg-slate-950', 'text-white');
+        registerTab.classList.remove('bg-white', 'text-slate-950');
+        loginTab.classList.add('bg-white', 'text-slate-950');
+        loginTab.classList.remove('bg-slate-950', 'text-white');
+      });
+    }
+
+    // Authentication state observer
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        console.log('User signed in:', user.email);
+        if (authSection) authSection.style.display = 'none';
+        if (servicesSection) servicesSection.classList.remove('hidden');
+        if (logoutButton) logoutButton.style.display = 'block';
+      } else {
+        // User is signed out
+        console.log('User signed out');
+        if (authSection) authSection.style.display = 'block';
+        if (servicesSection) servicesSection.classList.add('hidden');
+        if (logoutButton) logoutButton.style.display = 'none';
+      }
+    });
+
+    // Login form handler
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('login-user').value.trim();
+        const password = document.getElementById('login-pass').value;
+
+        if (!email || !password) {
+          if (loginMessage) {
+            loginMessage.textContent = 'Por favor completa todos los campos.';
+            loginMessage.className = 'login-message error';
+          }
+          return;
+        }
+
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password);
+          console.log('Login successful:', userCredential.user.email);
+          if (loginMessage) {
+            loginMessage.textContent = 'Inicio de sesión exitoso. Bienvenido!';
+            loginMessage.className = 'login-message success';
+          }
+          loginForm.reset();
+        } catch (error) {
+          console.error('Login error:', error.code, error.message);
+          let errorMessage = 'Error en el inicio de sesión.';
+          if (error.code === 'auth/user-not-found') {
+            errorMessage = 'Usuario no encontrado.';
+          } else if (error.code === 'auth/wrong-password') {
+            errorMessage = 'Contraseña incorrecta.';
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = 'Email inválido.';
+          }
+          if (loginMessage) {
+            loginMessage.textContent = errorMessage;
+            loginMessage.className = 'login-message error';
+          }
+        }
+      });
+    }
+
+    // Register form handler
+    if (registerForm) {
+      registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const name = document.getElementById('register-name').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const password = document.getElementById('register-pass').value;
+
+        if (!name || !email || !password) {
+          if (registerMessage) {
+            registerMessage.textContent = 'Por favor completa todos los campos.';
+            registerMessage.className = 'register-message error';
+          }
+          return;
+        }
+
+        if (password.length < 6) {
+          if (registerMessage) {
+            registerMessage.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+            registerMessage.className = 'register-message error';
+          }
+          return;
+        }
+
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          console.log('Registration successful:', userCredential.user.email);
+          if (registerMessage) {
+            registerMessage.textContent = 'Registro exitoso. Bienvenido!';
+            registerMessage.className = 'register-message success';
+          }
+          registerForm.reset();
+          // The auth state change will handle showing the services section
+        } catch (error) {
+          console.error('Registration error:', error.code, error.message);
+          let errorMessage = 'Error en el registro.';
+          if (error.code === 'auth/email-already-in-use') {
+            errorMessage = 'Este email ya está registrado.';
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage = 'Email inválido.';
+          } else if (error.code === 'auth/weak-password') {
+            errorMessage = 'La contraseña es demasiado débil.';
+          }
+          if (registerMessage) {
+            registerMessage.textContent = errorMessage;
+            registerMessage.className = 'register-message error';
+          }
+        }
+      });
+    }
+
+    // Logout handler
+    if (logoutButton) {
+      logoutButton.addEventListener('click', async () => {
+        try {
+          await signOut(auth);
+          console.log('Logout successful');
+        } catch (error) {
+          console.error('Logout error:', error);
+        }
+      });
+    }
+  </script>
 </body>
 </html>

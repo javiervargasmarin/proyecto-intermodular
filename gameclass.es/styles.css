@@ -123,3 +123,13 @@ textarea {
   border-style: solid !important;
   border-color: #111827 !important;
 }
+
+.login-message.success,
+.register-message.success {
+  color: #16a34a;
+}
+
+.login-message.error,
+.register-message.error {
+  color: #dc2626;
+}

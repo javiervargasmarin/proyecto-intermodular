@@ -3,8 +3,6 @@ const timeElement = document.getElementById('current-time');
 const weatherIconElement = document.getElementById('weather-icon');
 const weatherTextElement = document.getElementById('weather-text');
 const themeToggleButton = document.getElementById('theme-toggle');
-const loginForm = document.getElementById('login-form');
-const loginMessage = document.getElementById('login-message');
 const contactForm = document.getElementById('contact-form');
 const contactFeedback = document.getElementById('contact-feedback');
 
@@ -79,31 +77,6 @@ if (timeElement) {
 
 if (weatherIconElement || weatherTextElement) {
   updateWeather();
-}
-
-// Solo añadimos el comportamiento de login si el formulario existe en la página
-if (loginForm) {
-  loginForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const user = document.getElementById('login-user').value.trim();
-    const pass = document.getElementById('login-pass').value;
-
-    const validUser = 'cliente@gc.com';
-    const validPass = 'GameClass2026!';
-
-    if (user === validUser && pass === validPass) {
-      if (loginMessage) {
-        loginMessage.textContent = 'Bienvenido al área de clientes. Acceso concedido.';
-        loginMessage.className = 'login-message success';
-      }
-      loginForm.reset();
-    } else {
-      if (loginMessage) {
-        loginMessage.textContent = 'Usuario o contraseña incorrectos. Usa cliente@gc.com / GameClass2026!';
-        loginMessage.className = 'login-message error';
-      }
-    }
-  });
 }
 
 // Manejo del formulario de contacto
