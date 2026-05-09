@@ -96,21 +96,22 @@
       <span class="inline-block text-xs font-bold uppercase tracking-[0.35em] text-gc-accent2">Compra de Servicios</span>
       <h1 class="mt-6 text-4xl font-black uppercase tracking-tight text-slate-950">Selecciona los servicios que deseas adquirir.</h1>
       <p class="mt-6 max-w-3xl text-lg text-slate-700">Como cliente registrado, puedes comprar nuestros servicios de desarrollo de videojuegos.</p>
+      <p id="purchase-feedback" class="mt-6 text-sm font-semibold text-slate-700"></p>
       <div class="mt-10 grid gap-6 md:grid-cols-3">
         <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
           <h2 class="text-xl font-black uppercase tracking-[0.15em]">Desarrollo de videojuegos</h2>
           <p class="mt-4 text-slate-700">Precio: $5000</p>
-          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+          <button type="button" data-service-name="Desarrollo de videojuegos" data-service-price="5000" class="purchase-button mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
         </article>
         <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
           <h2 class="text-xl font-black uppercase tracking-[0.15em]">Diseño de niveles</h2>
           <p class="mt-4 text-slate-700">Precio: $2000</p>
-          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+          <button type="button" data-service-name="Diseño de niveles" data-service-price="2000" class="purchase-button mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
         </article>
         <article class="rounded-none border-4 border-slate-950 bg-slate-50 p-8">
           <h2 class="text-xl font-black uppercase tracking-[0.15em]">Marketing de videojuegos</h2>
           <p class="mt-4 text-slate-700">Precio: $3000</p>
-          <button onclick="alert('Compra realizada con éxito!')" class="mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
+          <button type="button" data-service-name="Marketing de videojuegos" data-service-price="3000" class="purchase-button mt-4 rounded-none border-4 border-slate-950 bg-slate-950 px-4 py-2 text-sm font-bold uppercase text-white transition duration-200 hover:-translate-y-1">Comprar</button>
         </article>
       </div>
     </section>
@@ -123,6 +124,7 @@
     // Import Firebase modules
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
     // Firebase configuration
     const firebaseConfig = {
@@ -137,6 +139,7 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     // Elements
     const loginForm = document.getElementById('login-form');
@@ -146,6 +149,7 @@
     const servicesSection = document.getElementById('services-section');
     const authSection = document.querySelector('.grid.gap-8');
     const logoutButton = document.getElementById('logout-button');
+    const purchaseFeedback = document.getElementById('purchase-feedback');
     const loginTab = document.getElementById('login-tab');
     const registerTab = document.getElementById('register-tab');
 
@@ -277,6 +281,66 @@
         }
       });
     }
+
+    // Purchase handler
+    async function sendPurchaseToFirebase(serviceName, servicePrice) {
+      const user = auth.currentUser;
+      if (!user) {
+        if (purchaseFeedback) {
+          purchaseFeedback.textContent = 'Debes iniciar sesión para comprar un servicio.';
+          purchaseFeedback.style.color = '#dc2626';
+        }
+        return;
+      }
+
+      if (!db) {
+        if (purchaseFeedback) {
+          purchaseFeedback.textContent = 'No se pudo conectar con la base de datos.';
+          purchaseFeedback.style.color = '#dc2626';
+        }
+        return;
+      }
+
+      if (purchaseFeedback) {
+        purchaseFeedback.textContent = 'Registrando compra...';
+        purchaseFeedback.style.color = '#0891b2';
+      }
+
+      try {
+        const purchasesRef = collection(db, 'purchases');
+        await addDoc(purchasesRef, {
+          userId: user.uid,
+          userEmail: user.email || null,
+          serviceName: serviceName,
+          servicePrice: Number(servicePrice),
+          purchasedAt: serverTimestamp(),
+          status: 'pending'
+        });
+
+        if (purchaseFeedback) {
+          purchaseFeedback.textContent = `Compra registrada: ${serviceName}. Gracias por tu pedido.`;
+          purchaseFeedback.style.color = '#16a34a';
+        }
+      } catch (error) {
+        console.error('Purchase error:', error.code, error.message);
+        if (purchaseFeedback) {
+          purchaseFeedback.textContent = 'Error al registrar la compra. Inténtalo de nuevo.';
+          purchaseFeedback.style.color = '#dc2626';
+        }
+      }
+    }
+
+    const purchaseButtons = document.querySelectorAll('.purchase-button');
+    purchaseButtons.forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        const target = event.currentTarget;
+        const serviceName = target.getAttribute('data-service-name');
+        const servicePrice = target.getAttribute('data-service-price');
+        if (serviceName && servicePrice) {
+          await sendPurchaseToFirebase(serviceName, servicePrice);
+        }
+      });
+    });
 
     // Logout handler
     if (logoutButton) {
