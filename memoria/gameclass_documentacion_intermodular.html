@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameClass — Proyecto Intermodular 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d1117;
+    --ink-soft: #1c2431;
+    --surface: #f4f1ea;
+    --surface-alt: #ebe7de;
+    --accent: #2a5ba5;
+    --accent2: #2563eb;
+    --accent3: #059669;
+    --gold: #d97706;
+    --muted: #6b7280;
+    --border: #d1ccc0;
+    --white: #fdfcf8;
+    --code-bg: #0d1117;
+    --code-text: #58a6ff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: var(--surface);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 240px; height: 100vh;
+    background: var(--ink);
+    color: var(--surface);
+    padding: 2rem 0;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-logo {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-logo .logo-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-logo h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--white);
+    letter-spacing: -0.5px;
+  }
+
+  .sidebar nav { flex: 1; }
+
+  .nav-section {
+    padding: 0.5rem 1.5rem 0.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-top: 0.75rem;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 0.45rem 1.5rem;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 300;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+  }
+
+  .nav-item:hover {
+    color: var(--white);
+    border-left-color: var(--accent);
+    background: rgba(255,255,255,0.04);
+    padding-left: 1.75rem;
+  }
+
+  .sidebar-meta {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    margin-left: 240px;
+    min-height: 100vh;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--ink);
+    color: var(--white);
+    padding: 5rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 85% 20%, rgba(37,99,235,0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 60% at 15% 80%, rgba(232,72,85,0.14) 0%, transparent 60%);
+  }
+
+  .cover-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .cover-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .cover-badge::before {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .cover h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+
+  .cover h1 span {
+    color: var(--accent);
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 2.5rem;
+    position: relative;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .meta-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+
+  .meta-value {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  .cover-participants {
+    position: absolute;
+    right: 4rem;
+    bottom: 3.5rem;
+    text-align: right;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  .cover-participants strong {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .cover-participants span {
+    display: block;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+  }
+
+  /* ── MODULE BANNER ── */
+  .module-banner {
+    background: var(--ink-soft);
+    color: var(--white);
+    padding: 1rem 4rem;
+    display: flex;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .module-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    padding: 0.3rem 1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    margin-right: 0.5rem;
+    color: rgba(255,255,255,0.55);
+    white-space: nowrap;
+  }
+
+  .module-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* ── PAGE SECTIONS ── */
+  .section {
+    padding: 3.5rem 4rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:nth-child(even) {
+    background: var(--white);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-number {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 3rem;
+    color: var(--border);
+    line-height: 1;
+    letter-spacing: -2px;
+    flex-shrink: 0;
+    width: 70px;
+    text-align: right;
+  }
+
+  .section-title-block {}
+
+  .section-module {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.7rem;
+    letter-spacing: -1px;
+    color: var(--ink);
+    line-height: 1.15;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.3px;
+    margin: 2rem 0 0.75rem;
+    color: var(--ink);
+  }
+
+  h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  p {
+    margin-bottom: 0.9rem;
+    color: #2d3748;
+    max-width: 72ch;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+  }
+
+  thead {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  thead th {
+    padding: 0.75rem 1rem;
+    font-family: 'Space Mono', monospace;
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  tbody tr:nth-child(even) {
+    background: var(--surface-alt);
+  }
+
+  tbody tr:hover {
+    background: #dde8ff;
+  }
+
+  tbody td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  tbody td:first-child {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.77rem;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    color: #e6edf3;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.73rem;
+    line-height: 1.65;
+    border-left: 3px solid var(--accent2);
+  }
+
+  code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82em;
+    background: var(--ink);
+    color: var(--code-text);
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    border-left: 3px solid;
+    font-size: 0.85rem;
+  }
+
+  .callout-warning {
+    background: #fff3cd;
+    border-color: var(--gold);
+  }
+
+  .callout-info {
+    background: #dbeafe;
+    border-color: var(--accent2);
+  }
+
+  .callout-success {
+    background: #d1fae5;
+    border-color: var(--accent3);
+  }
+
+  .callout-danger {
+    background: #fee2e2;
+    border-color: var(--accent);
+  }
+
+  .callout strong {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .card {
+    background: var(--white);
+    padding: 1.5rem;
+    transition: transform 0.15s;
+  }
+
+  .card:hover {
+    background: var(--surface);
+  }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    margin-bottom: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 1rem;
+  }
+
+  .card h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+    margin: 0 0 0.4rem;
+  }
+
+  .card p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ── IP / SPEC BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid var(--border);
+    background: var(--surface-alt);
+    color: var(--ink);
+    margin: 0.1rem;
+  }
+
+  .badge-blue {
+    background: #dbeafe;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+  }
+
+  .badge-green {
+    background: #d1fae5;
+    border-color: #6ee7b7;
+    color: #065f46;
+  }
+
+  .badge-red {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    color: #991b1b;
+  }
+
+  /* ── SERVICE TABLE SPECIAL ── */
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .service-item {
+    background: var(--white);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .service-port {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+  }
+
+  .service-status {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent3);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0 1.5rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── TOC ── */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin: 1.5rem 0;
+  }
+
+  .toc-item {
+    background: var(--white);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.15s;
+  }
+
+  .toc-item:hover {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .toc-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--border);
+    line-height: 1;
+    width: 36px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+
+  .toc-item:hover .toc-num { color: rgba(255,255,255,0.2); }
+
+  .toc-text {}
+  .toc-module {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.15rem;
+    transition: color 0.15s;
+  }
+
+  .toc-item:hover .toc-module { color: var(--accent); }
+
+  .toc-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    transition: color 0.15s;
+  }
+
+  /* ── STEP LIST ── */
+  .step-list {
+    counter-reset: steps;
+    list-style: none;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .step-list li {
+    counter-increment: steps;
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    align-items: flex-start;
+  }
+
+  .step-list li::before {
+    content: counter(steps, decimal-leading-zero);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+    padding-top: 0.1rem;
+    width: 28px;
+  }
+
+  /* ── BULLET LIST ── */
+  ul.doc-list {
+    list-style: none;
+    margin: 0.75rem 0 1.25rem;
+    padding: 0;
+  }
+
+  ul.doc-list li {
+    padding: 0.3rem 0 0.3rem 1.25rem;
+    position: relative;
+    font-size: 0.88rem;
+    color: #2d3748;
+  }
+
+  ul.doc-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent2);
+    font-size: 0.75rem;
+  }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    padding: 1.5rem 4rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  /* ── NETWORK DIAGRAM ── */
+  .network-visual {
+    background: var(--ink);
+    color: var(--white);
+    padding: 2rem;
+    margin: 1.5rem 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 2.2;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .network-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .net-node {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--code-text);
+    font-size: 0.7rem;
+    position: relative;
+  }
+
+  .net-internet { border-color: var(--gold); color: var(--gold); }
+  .net-router { border-color: var(--accent); color: var(--accent); }
+  .net-switch { border-color: var(--accent2); color: #93c5fd; }
+  .net-server { border-color: var(--accent3); color: #6ee7b7; }
+  .net-client { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); }
+
+  /* ── TWO COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 1.5rem 0;
+  }
+
+  @media (max-width: 900px) {
+    .two-col { grid-template-columns: 1fr; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .section { padding: 2.5rem 1.5rem; }
+    .cover { padding: 3rem 1.5rem 2.5rem; }
+    .cover-participants { position: static; text-align: left; margin-top: 1.5rem; }
+    .module-banner { padding: 1rem 1.5rem; }
+    .doc-footer { padding: 1.5rem; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .cover > * { animation: fadeUp 0.6s ease both; }
+  .cover-badge { animation-delay: 0.05s; }
+  .cover h1 { animation-delay: 0.15s; }
+  .cover-meta { animation-delay: 0.25s; }
+  .cover-participants { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-tag">Proyecto Intermodular</span>
+    <h2>GameClass</h2>
+  </div>
+  <nav>
+    <div class="nav-section">Índice</div>
+    <a class="nav-item" href="#toc">Tabla de Contenidos</a>
+
+    <div class="nav-section">Infraestructura</div>
+    <a class="nav-item" href="#montaje">Montaje y Mantenimiento</a>
+    <a class="nav-item" href="#redes">Redes de Área Local</a>
+
+    <div class="nav-section">Sistemas</div>
+    <a class="nav-item" href="#sistemas">Sistemas Operativos en Red</a>
+    <a class="nav-item" href="#servicios">Servicios en Red</a>
+    <a class="nav-item" href="#seguridad">Seguridad Informática</a>
+
+    <div class="nav-section">Aplicaciones</div>
+    <a class="nav-item" href="#webapp">Aplicaciones Web</a>
+  </nav>
+  <div class="sidebar-meta">
+    Mayo 2026 · Versión 1.0<br>
+    Javier V. · Juan B.<br>
+    Marta G. · Alejandro C.
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- COVER -->
+<header class="cover">
+  <div class="cover-grid"></div>
+  <div class="cover-badge">Proyecto Intermodular · Mayo 2026</div>
+  <h1>Game<span>Class</span><br>Infraestructura IT</h1>
+  <div class="cover-meta">
+    <div class="meta-item">
+      <span class="meta-label">Módulos</span>
+      <span class="meta-value">6 Documentos Integrados</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Empresa</span>
+      <span class="meta-value">GameClass (PYME ficticia)</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Dominio</span>
+      <span class="meta-value">gameclass.local</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Servidor</span>
+      <span class="meta-value">192.168.0.2 — Ubuntu</span>
+    </div>
+  </div>
+  <div class="cover-participants">
+    <strong>Participantes</strong>
+    <span>Javier V.</span>
+    <span>Juan B.</span>
+    <span>Marta G.</span>
+    <span>Alejandro C.</span>
+  </div>
+</header>
+
+<!-- MODULE PILLS -->
+<div class="module-banner">
+  <span class="module-pill active">Montaje</span>
+  <span class="module-pill active">Redes LAN</span>
+  <span class="module-pill active">SSOO Red</span>
+  <span class="module-pill active">Servicios Red</span>
+  <span class="module-pill active">Seguridad</span>
+  <span class="module-pill active">Aplicaciones Web</span>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<section class="section" id="toc">
+  <div class="section-header">
+    <div class="section-number">00</div>
+    <div class="section-title-block">
+      <div class="section-module">Navegación</div>
+      <h2 class="section-title">Tabla de Contenidos</h2>
+    </div>
+  </div>
+
+  <div class="toc-grid">
+    <a class="toc-item" href="#montaje">
+      <div class="toc-num">01</div>
+      <div class="toc-text">
+        <span class="toc-module">Montaje y Mantenimiento</span>
+        <div class="toc-title">Hardware, inventario y red física</div>
+      </div>
+    </a>
+    <a class="toc-item" href="#redes">
+      <div class="toc-num">02</div>
+      <div class="toc-text">
+        <span class="toc-module">Redes de Área Local</span>
+        <div class="toc-title">Diseño lógico/físico, IP, Packet Tracer</div>
+      </div>
+    </a>
+    <a class="toc-item" href="#sistemas">
+      <div class="toc-num">03</div>
+      <div class="toc-text">
+        <span class="toc-module">Sistemas Operativos en Red</span>
+        <div class="toc-title">Ventoy, Active Directory, dominio</div>
+      </div>
+    </a>
+    <a class="toc-item" href="#servicios">
+      <div class="toc-num">04</div>
+      <div class="toc-text">
+        <span class="toc-module">Servicios en Red</span>
+        <div class="toc-title">Apache, SFTP, DNS, correo, DHCP</div>
+      </div>
+    </a>
+    <a class="toc-item" href="#seguridad">
+      <div class="toc-num">05</div>
+      <div class="toc-text">
+        <span class="toc-module">Seguridad Informática</span>
+        <div class="toc-title">Firewall, antivirus, backups, GPO</div>
+      </div>
+    </a>
+    <a class="toc-item" href="#webapp">
+      <div class="toc-num">06</div>
+      <div class="toc-text">
+        <span class="toc-module">Aplicaciones Web</span>
+        <div class="toc-title">GAMECLASS web app — Firebase + Tailwind</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 01 — MONTAJE Y MANTENIMIENTO        -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="montaje">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Montaje y Mantenimiento</div>
+      <h2 class="section-title">Hardware, Red Física e Inventario</h2>
+    </div>
+  </div>
+
+  <p>La infraestructura de GameClass se compone de una red local básica (LAN) conectada a Internet, diseñada para soportar los puestos de trabajo del estudio y los servicios internos de la empresa.</p>
+
+  <h3>1.1 Selección de Hardware</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Puestos de Trabajo (PC0 y PC1)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Especificación</th></tr></thead>
+          <tbody>
+            <tr><td>CPU</td><td>Intel Core i5 / AMD Ryzen 5</td></tr>
+            <tr><td>RAM</td><td>8–16 GB</td></tr>
+            <tr><td>Disco</td><td>SSD 256–512 GB</td></tr>
+            <tr><td>Red</td><td>Gigabit Ethernet</td></tr>
+            <tr><td>SO</td><td>Windows 10/11</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <h4>Servidor (Server0)</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Componente</th><th>Especificación</th></tr></thead>
+          <tbody>
+            <tr><td>CPU</td><td>Intel Xeon / Ryzen Server</td></tr>
+            <tr><td>RAM</td><td>16–32 GB</td></tr>
+            <tr><td>Disco</td><td>2× SSD 512 GB en RAID 1</td></tr>
+            <tr><td>Red</td><td>Gigabit Ethernet</td></tr>
+            <tr><td>SO</td><td>Linux Server / Windows Server</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <h3>1.2 Inventario de Dispositivos</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Equipo</th><th>Tipo</th><th>Especificaciones</th><th>IP</th><th>Conexión</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>PC-01</td><td>PC1</td><td>Cliente</td><td>i5 / 8GB / 256SSD</td><td><span class="badge badge-blue">192.168.1.10</span></td><td>Switch</td></tr>
+        <tr><td>PC-02</td><td>PC0</td><td>Cliente</td><td>i5 / 8GB / 256SSD</td><td><span class="badge badge-blue">192.168.1.11</span></td><td>Switch</td></tr>
+        <tr><td>SRV-01</td><td>Server0</td><td>Servidor</td><td>Xeon / 16GB / RAID1</td><td><span class="badge badge-green">192.168.1.2</span></td><td>Switch</td></tr>
+        <tr><td>SW-01</td><td>Switch 2950T</td><td>Red</td><td>24 puertos Fast/Gig</td><td>—</td><td>Router + PCs</td></tr>
+        <tr><td>RT-01</td><td>Router0</td><td>Red</td><td>Router básico</td><td><span class="badge badge-blue">192.168.1.1</span></td><td>Internet</td></tr>
+        <tr><td>NET-01</td><td>Cloud</td><td>Internet</td><td>ISP</td><td>WAN dinámica</td><td>Router</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.3 Presupuesto</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Equipo</th><th>Cantidad</th><th>Precio unitario</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>PC cliente</td><td>2</td><td>700 €</td><td>1.400 €</td></tr>
+        <tr><td>Servidor</td><td>1</td><td>1.800 €</td><td>1.800 €</td></tr>
+        <tr><td>Switch 24 puertos</td><td>1</td><td>250 €</td><td>250 €</td></tr>
+        <tr><td>Router</td><td>1</td><td>150 €</td><td>150 €</td></tr>
+        <tr><td>Cableado</td><td>—</td><td>—</td><td>100 €</td></tr>
+        <tr><td colspan="3" style="font-family:'Space Mono',monospace;font-weight:700;font-size:0.75rem;letter-spacing:1px;">TOTAL ESTIMADO</td><td style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--accent);">3.700 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>1.4 Plan de Mantenimiento</h3>
+  <div class="two-col">
+    <div>
+      <h4>Preventivo</h4>
+      <ul class="doc-list">
+        <li>Actualizaciones periódicas de SO y software</li>
+        <li>Copias de seguridad programadas</li>
+        <li>Revisión física de hardware y cableado</li>
+        <li>Monitorización de temperatura y recursos</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Correctivo</h4>
+      <ul class="doc-list">
+        <li>Sustitución de hardware defectuoso</li>
+        <li>Reparación de configuraciones de red</li>
+        <li>Restauración desde copia de seguridad</li>
+        <li>Recuperación de datos en caso de fallo</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 02 — REDES DE ÁREA LOCAL            -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="redes">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Redes de Área Local</div>
+      <h2 class="section-title">Diseño e Implantación de la LAN</h2>
+    </div>
+  </div>
+
+  <p>La red LAN de GameClass sigue una <strong>topología en estrella</strong>, con un switch central que interconecta todos los dispositivos. El rango privado es <code>192.168.0.0/24</code>.</p>
+
+  <div class="divider">Arquitectura de red</div>
+
+  <div class="network-visual">
+    <div style="position:relative;z-index:1;text-align:center;line-height:3;">
+      <div><span class="net-node net-internet">☁ INTERNET (Cloud-PT)</span></div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.3);">│ WAN</div>
+      <div><span class="net-node net-router">⊞ ROUTER — 192.168.0.1 (Gateway + NAT)</span></div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.3);">│</div>
+      <div><span class="net-node net-switch">⊟ SWITCH 24 puertos</span></div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.25);margin-top:0.5rem;">┌─────────────┬─────────────┬─────────────┬─────────────┐</div>
+      <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:0.25rem;">
+        <span class="net-node net-server">SERVER Ubuntu 192.168.0.2</span>
+        <span class="net-node net-client">Win10 .0.4</span>
+        <span class="net-node net-client">Debian .0.3</span>
+        <span class="net-node net-client">Clientes .0.5–.0.12</span>
+        <span class="net-node" style="border-color:#f59e0b;color:#f59e0b;">AP WiFi .0.20</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>2.1 Tabla de Direccionamiento IP</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Dispositivo</th><th>Dirección IP</th><th>Función</th></tr></thead>
+      <tbody>
+        <tr><td>Router</td><td><span class="badge badge-red">192.168.0.1</span></td><td>Gateway y acceso a Internet</td></tr>
+        <tr><td>Servidor Ubuntu</td><td><span class="badge badge-green">192.168.0.2</span></td><td>DHCP, DNS, servidor web Apache</td></tr>
+        <tr><td>Debian (cliente)</td><td><span class="badge badge-blue">192.168.0.3</span></td><td>Equipo cliente Linux</td></tr>
+        <tr><td>Windows 10</td><td><span class="badge badge-blue">192.168.0.4</span></td><td>Equipo cliente Windows</td></tr>
+        <tr><td>Clientes 5–12</td><td><span class="badge badge-blue">192.168.0.5–0.12</span></td><td>Equipos de trabajo</td></tr>
+        <tr><td>Access Point WiFi</td><td><span class="badge badge-blue">192.168.0.20</span></td><td>Conexión inalámbrica</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.2 Infraestructura Física</h3>
+
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon">🔌</div>
+      <h4>Cableado Cat6</h4>
+      <p>Ethernet Cat6 con conectores RJ45 para alta velocidad y baja interferencia.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📦</div>
+      <h4>Armario Rack</h4>
+      <p>Organización centralizada del router, switch y cableado principal.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📡</div>
+      <h4>Access Point WiFi</h4>
+      <p>SSID: <code>GameClass_WiFi</code> · WPA2-PSK · Cobertura inalámbrica.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🖥</div>
+      <h4>Packet Tracer</h4>
+      <p>Simulación y verificación de la topología con Cisco Packet Tracer.</p>
+    </div>
+  </div>
+
+  <h3>2.3 Presupuesto de Red</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Componente</th><th>Cantidad</th><th>Precio unitario</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Router</td><td>1</td><td>80 €</td><td>80 €</td></tr>
+        <tr><td>Switch 24 puertos</td><td>1</td><td>150 €</td><td>150 €</td></tr>
+        <tr><td>Servidor Ubuntu</td><td>1</td><td>600 €</td><td>600 €</td></tr>
+        <tr><td>Access Point WiFi</td><td>1</td><td>70 €</td><td>70 €</td></tr>
+        <tr><td>Cableado Cat6</td><td>—</td><td>—</td><td>200 €</td></tr>
+        <tr><td>Conectores RJ45</td><td>—</td><td>—</td><td>50 €</td></tr>
+        <tr><td>Armario Rack</td><td>1</td><td>120 €</td><td>120 €</td></tr>
+        <tr><td colspan="3" style="font-family:'Space Mono',monospace;font-weight:700;font-size:0.75rem;">TOTAL INFRAESTRUCTURA</td><td style="font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--accent);">1.270 €</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 03 — SISTEMAS OPERATIVOS EN RED     -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="sistemas">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Sistemas Operativos en Red</div>
+      <h2 class="section-title">Ventoy, Dominio Active Directory y GPO</h2>
+    </div>
+  </div>
+
+  <h3>3.1 Ventoy — Gestión de ISOs</h3>
+  <p>Ventoy permite arrancar múltiples imágenes ISO desde un único pendrive (o archivo VDI en VirtualBox). En GameClass se utiliza para centralizar y desplegar los sistemas operativos sin montaje/desmontaje manual de ISOs.</p>
+
+  <div class="callout callout-info">
+    <strong>Requisitos del Pendrive</strong>
+    Capacidad mínima 16 GB (recomendado 32 GB+) · USB 3.0 · Cualquier sistema de archivos previo (NTFS, exFAT, FAT32)
+  </div>
+
+  <h4>ISOs utilizadas en el proyecto</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ISO</th><th>Función en GameClass</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu Server</td><td>Servidor principal: controlador de dominio Active Directory (Samba4), DHCP, DNS, Apache</td></tr>
+        <tr><td>Windows 10</td><td>Cliente Windows, unión al dominio <code>gameclass.local</code>, prueba de GPO</td></tr>
+        <tr><td>Debian 12 Netinst</td><td>Cliente Linux, integración con dominio via Winbind/Kerberos, pruebas de conectividad</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.2 Instalación del Dominio en Ubuntu (Samba AD)</h3>
+  <p>Ubuntu actúa como controlador de dominio Active Directory mediante Samba4. El dominio creado es <code>GAMECLASS.LOCAL</code> con controlador <code>dc1.gameclass.local</code> (IP: <code>192.168.0.2</code>).</p>
+
+  <pre>sudo apt install samba krb5-user winbind smbclient dnsutils
+# Detener servicios clásicos de Samba
+sudo systemctl stop smbd nmbd winbind
+sudo systemctl disable smbd nmbd winbind
+# Crear el dominio Active Directory
+sudo samba-tool domain provision --use-rfc2307 --interactive
+#  Realm: GAMECLASS.LOCAL
+#  Domain: GAMECLASS
+#  Role: dc
+#  DNS forwarder: 192.168.0.1</pre>
+
+  <h4>Verificación del dominio</h4>
+  <pre>sudo samba-tool domain level show
+# Forest function level: (Windows) 2008 R2
+# Domain function level: (Windows) 2008 R2
+
+host -t SRV _ldap._tcp.gameclass.local
+host dc1.gameclass.local
+# dc1.gameclass.local has address 192.168.0.2</pre>
+
+  <h4>Grupos y usuarios del dominio</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Grupo</th><th>Usuarios</th><th>Contraseña</th></tr></thead>
+      <tbody>
+        <tr><td>desarrollo</td><td>dev1, dev2</td><td>ubuntupyme1234</td></tr>
+        <tr><td>arte</td><td>art1, art2</td><td>ubuntupyme1234</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.3 Unión al dominio: Debian</h3>
+  <pre>sudo apt install samba winbind libnss-winbind libpam-winbind krb5-user -y
+# Reino Kerberos: GAMECLASS.LOCAL
+# KDC: dc1.gameclass.local
+sudo systemctl restart smb nmbd winbind
+sudo net ads join -U administrator
+# → Joined 'DEBIANPYME' to dns domain 'gameclass.local'</pre>
+
+  <div class="callout callout-success">
+    <strong>Verificación Kerberos en Debian</strong>
+    <code>kinit dev1</code> → ticket válido · <code>klist</code> → Default principal: dev1@GAMECLASS.LOCAL
+  </div>
+
+  <h3>3.4 Unión al dominio: Windows 10</h3>
+  <ol class="step-list">
+    <li>Ejecutar <code>sysdm.cpl</code> → Nombre del equipo → Cambiar</li>
+    <li>Seleccionar "Dominio" e introducir <code>gameclass.local</code></li>
+    <li>Autenticarse con credenciales del administrador del dominio</li>
+    <li>Confirmación: "Welcome to the gameclass.local domain"</li>
+  </ol>
+
+  <h3>3.5 Políticas de Grupo (GPO) — Windows</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Política</th><th>Ruta</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Longitud mínima de contraseña</td><td>Computer Config → Security Settings → Password Policy</td><td>8 caracteres</td></tr>
+        <tr><td>Complejidad de contraseña</td><td>Computer Config → Security Settings → Password Policy</td><td>Activado</td></tr>
+        <tr><td>Umbral de bloqueo de cuenta</td><td>Computer Config → Account Lockout Policy</td><td>3 intentos</td></tr>
+        <tr><td>Duración del bloqueo</td><td>Computer Config → Account Lockout Policy</td><td>5 minutos</td></tr>
+        <tr><td>Prohibir Panel de Control</td><td>User Config → Admin Templates → Control Panel</td><td>Habilitado</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>3.6 Configuración de Red por Equipo</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Equipo</th><th>IP</th><th>Máscara</th><th>Gateway</th><th>DNS</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu (DC)</td><td>192.168.0.2</td><td>255.255.255.0</td><td>192.168.0.1</td><td>127.0.0.1</td></tr>
+        <tr><td>Debian</td><td>192.168.0.3</td><td>255.255.255.0</td><td>192.168.0.1</td><td>192.168.0.2</td></tr>
+        <tr><td>Windows 10</td><td>192.168.0.4</td><td>255.255.255.0</td><td>192.168.0.1</td><td>192.168.0.2</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <strong>⚠ Atención — Firewall Windows</strong>
+    Para el correcto funcionamiento del dominio y la conectividad, desactivar el Windows Defender Firewall en los equipos cliente durante el laboratorio.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 04 — SERVICIOS EN RED               -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="servicios">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Servicios en Red</div>
+      <h2 class="section-title">Apache, SFTP, DNS, Correo y DHCP</h2>
+    </div>
+  </div>
+
+  <p>Todos los servicios se ejecutan sobre el servidor Ubuntu (<code>192.168.0.2</code>), dominio <code>gameclass.local</code>, controlador <code>dc1.gameclass.local</code>.</p>
+
+  <h3>Resumen de Servicios Activos</h3>
+  <div class="service-grid">
+    <div class="service-item">
+      <div class="service-name">Apache2</div>
+      <div class="service-port">Puerto 80 · HTTP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">OpenSSH / SFTP</div>
+      <div class="service-port">Puerto 22 · SSH</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">DNS (Samba AD)</div>
+      <div class="service-port">Puerto 53 · UDP/TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Postfix (SMTP)</div>
+      <div class="service-port">Puerto 25 · TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Dovecot IMAP</div>
+      <div class="service-port">Puerto 143 · TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Dovecot POP3</div>
+      <div class="service-port">Puerto 110 · TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">Kerberos</div>
+      <div class="service-port">Puerto 88 · TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+    <div class="service-item">
+      <div class="service-name">LDAP (Samba)</div>
+      <div class="service-port">Puerto 389 · TCP</div>
+      <div class="service-status">✓ Activo</div>
+    </div>
+  </div>
+
+  <h3>4.1 Servidor Web — Apache2</h3>
+  <pre>sudo apt install apache2 -y
+systemctl status apache2
+# Active: active (running)</pre>
+  <p>Sirve contenido desde <code>/var/www/html/</code>. Acceso interno: <code>http://192.168.0.2</code>. Se creó una página corporativa básica (<code>prueba.html</code>) con el nombre GameClass y descripción del servidor.</p>
+
+  <h3>4.2 Servicio SFTP — OpenSSH</h3>
+  <pre>sudo apt install openssh-server -y
+# Configuración en /etc/ssh/sshd_config:
+PermitRootLogin no
+MaxAuthTries 3</pre>
+  <p>SFTP opera sobre SSH en el puerto 22. Desde cliente Windows: <code>sftp usuario@192.168.0.2</code></p>
+
+  <h3>4.3 DNS — Samba Active Directory</h3>
+  <p>El servidor DNS está integrado en Samba AD. Se deshabilitó <code>systemd-resolved</code> para evitar conflictos. Registros gestionados:</p>
+  <ul class="doc-list">
+    <li><code>dc1.gameclass.local</code> → <code>192.168.0.2</code></li>
+    <li><code>gameclass.local</code> → <code>192.168.0.2</code></li>
+  </ul>
+  <pre>nslookup gameclass.local       # desde cliente Windows
+nltest /dsgetdc:gameclass.local</pre>
+
+  <h3>4.4 Correo Electrónico Corporativo</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Componente</th><th>Software</th><th>Función</th></tr></thead>
+      <tbody>
+        <tr><td>MTA</td><td>Postfix</td><td>Envío de correo (SMTP · Puerto 25)</td></tr>
+        <tr><td>MDA</td><td>Dovecot</td><td>Buzones y entrega (IMAP 143 · POP3 110)</td></tr>
+        <tr><td>MUA</td><td>Thunderbird</td><td>Cliente de correo del usuario</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Configuración Postfix (/etc/postfix/main.cf)</h4>
+  <pre>myhostname = dc1.gameclass.local
+mydomain = gameclass.local
+myorigin = $mydomain
+mydestination = $myhostname, localhost, $mydomain
+inet_interfaces = all
+mynetworks = 192.168.0.0/24
+home_mailbox = Maildir/</pre>
+
+  <h4>Thunderbird — Configuración cliente (usuario dev1)</h4>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Servidor entrante</td><td>IMAP · <code>192.168.0.2</code> · Puerto 143</td></tr>
+        <tr><td>Servidor saliente</td><td>SMTP · <code>192.168.0.2</code> · Puerto 25</td></tr>
+        <tr><td>Seguridad</td><td>Ninguna (entorno de laboratorio)</td></tr>
+        <tr><td>Usuario</td><td>dev1 (credenciales de dominio)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.5 Automatización de Tareas</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Ubuntu Server (cron)</h4>
+      <pre>0 2 * * * /usr/local/bin/backup.sh</pre>
+      <p style="font-size:0.82rem;">Copia diaria a las 02:00 AM de configuraciones críticas (<code>/etc/samba</code>, <code>/etc/postfix</code>, etc.) a <code>/backup/</code> en formato <code>.tar.gz</code>.</p>
+    </div>
+    <div>
+      <h4>Windows 10 (Programador de tareas)</h4>
+      <pre>xcopy C:\Users\windowspyme\Documents C:\Backup /E /I /Y</pre>
+      <p style="font-size:0.82rem;">Tarea "Backup Diario" a las 22:00 h, copia de documentos del usuario a <code>C:\Backup</code>.</p>
+    </div>
+  </div>
+
+  <h4>Debian (cron — mantenimiento)</h4>
+  <pre>0 3 * * * rm -rf /tmp/*</pre>
+  <p>Limpieza de archivos temporales todos los días a las 03:00 h.</p>
+
+  <h3>4.6 Servidor DHCP (Debian/Ubuntu)</h3>
+  <pre>apt install isc-dhcp-server
+# /etc/dhcp/dhcpd.conf
+subnet 192.168.0.0 netmask 255.255.255.0 {
+  range 192.168.0.100 192.168.0.200;
+  option routers 192.168.0.1;
+  option domain-name-servers 192.168.0.2;
+  option domain-name "gameclass.local";
+}</pre>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 05 — SEGURIDAD INFORMÁTICA          -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="seguridad">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Seguridad Informática</div>
+      <h2 class="section-title">Firewall, Antivirus, Backups y Contingencias</h2>
+    </div>
+  </div>
+
+  <h3>5.1 Políticas de Contraseñas (Samba AD)</h3>
+  <pre>sudo samba-tool domain passwordsettings set --min-pwd-len=8
+sudo samba-tool domain passwordsettings set --complexity=on
+sudo samba-tool domain passwordsettings set --max-pwd-age=90
+sudo samba-tool domain passwordsettings set --min-pwd-age=1
+sudo samba-tool domain passwordsettings set --history-len=5</pre>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Política</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Longitud mínima</td><td>8 caracteres</td></tr>
+        <tr><td>Complejidad</td><td>Activada</td></tr>
+        <tr><td>Caducidad máxima</td><td>90 días</td></tr>
+        <tr><td>Caducidad mínima</td><td>1 día</td></tr>
+        <tr><td>Historial</td><td>5 contraseñas anteriores</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.2 Copias de Seguridad</h3>
+  <p>Script automatizado en <code>/usr/local/bin/backup.sh</code>, ejecutado diariamente a las 02:00 vía cron:</p>
+  <pre>#!/bin/bash
+FECHA=$(date +%Y%m%d)
+DESTINO=/backup
+mkdir -p $DESTINO
+tar -czf $DESTINO/configs_$FECHA.tar.gz \
+  /etc/postfix /etc/dovecot /etc/dhcp \
+  /etc/samba /etc/netplan
+echo "Backup completado: $FECHA"</pre>
+
+  <h4>Restauración</h4>
+  <pre>sudo tar -xzf /backup/configs_FECHA.tar.gz -C /</pre>
+
+  <h3>5.3 Antivirus — ClamAV</h3>
+  <pre>sudo apt install clamav clamav-daemon -y
+sudo freshclam                              # Actualizar base de datos
+sudo clamscan -r /home --infected           # Escaneo manual
+# Escaneo semanal automatizado (cron):
+0 3 * * 0 clamscan -r /home --infected >> /var/log/clamav_scan.log</pre>
+
+  <h3>5.4 Firewall — iptables</h3>
+
+  <div class="callout callout-info">
+    <strong>Política por defecto</strong>
+    INPUT: DROP (denegar todo) · FORWARD: DROP · OUTPUT: ACCEPT<br>
+    Persistencia mediante <code>netfilter-persistent</code> (se aplica automáticamente en cada reinicio).
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Puerto</th><th>Servicio</th><th>Protocolo</th></tr></thead>
+      <tbody>
+        <tr><td>22</td><td>SSH</td><td>TCP</td></tr>
+        <tr><td>25</td><td>SMTP</td><td>TCP</td></tr>
+        <tr><td>53</td><td>DNS</td><td>UDP/TCP</td></tr>
+        <tr><td>67</td><td>DHCP</td><td>UDP</td></tr>
+        <tr><td>80</td><td>HTTP</td><td>TCP</td></tr>
+        <tr><td>88</td><td>Kerberos</td><td>TCP</td></tr>
+        <tr><td>110</td><td>POP3</td><td>TCP</td></tr>
+        <tr><td>143</td><td>IMAP</td><td>TCP</td></tr>
+        <tr><td>389</td><td>LDAP</td><td>TCP</td></tr>
+        <tr><td>445</td><td>SMB</td><td>TCP</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.5 Medidas de Seguridad Lógica</h3>
+  <div class="two-col">
+    <div>
+      <h4>SSH</h4>
+      <ul class="doc-list">
+        <li>Acceso root deshabilitado: <code>PermitRootLogin no</code></li>
+        <li>Máximo 3 intentos: <code>MaxAuthTries 3</code></li>
+      </ul>
+      <h4>Samba AD</h4>
+      <ul class="doc-list">
+        <li>Políticas de contraseñas activadas</li>
+        <li>Kerberos para autenticación segura</li>
+        <li>LDAP para gestión centralizada de usuarios</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Correo (Postfix/Dovecot)</h4>
+      <ul class="doc-list">
+        <li>Autenticación obligatoria para envío</li>
+        <li>Buzones individuales por usuario</li>
+        <li>Autenticación contra Samba AD via PAM + Winbind</li>
+      </ul>
+      <h4>Pruebas de Vulnerabilidad</h4>
+      <ul class="doc-list">
+        <li>Escaneo con <code>nmap -sV 192.168.0.2</code></li>
+        <li>Puertos abiertos: solo servicios legítimos</li>
+        <li>Sin puertos innecesarios expuestos</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>5.6 Medidas de Seguridad Física</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Medida</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>Acceso físico restringido</td><td>Servidor en sala cerrada con acceso controlado</td></tr>
+        <tr><td>CPD climatizado</td><td>Temperatura y humedad controladas</td></tr>
+        <tr><td>SAI</td><td>Sistema de alimentación ininterrumpida</td></tr>
+        <tr><td>Control de acceso</td><td>Solo personal autorizado accede físicamente</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.7 Plan de Contingencias</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Servicio</th><th>Comando de reinicio</th></tr></thead>
+      <tbody>
+        <tr><td>Samba AD</td><td><code>sudo systemctl restart samba-ad-dc</code></td></tr>
+        <tr><td>DHCP</td><td><code>sudo systemctl restart isc-dhcp-server</code></td></tr>
+        <tr><td>Postfix</td><td><code>sudo systemctl restart postfix</code></td></tr>
+        <tr><td>Dovecot</td><td><code>sudo systemctl restart dovecot</code></td></tr>
+        <tr><td>Apache</td><td><code>sudo systemctl restart apache2</code></td></tr>
+        <tr><td>Firewall</td><td><code>sudo bash /usr/local/bin/firewall.sh</code></td></tr>
+        <tr><td>Red</td><td><code>sudo netplan apply</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MÓDULO 06 — APLICACIONES WEB               -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="webapp">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <div class="section-title-block">
+      <div class="section-module">Módulo · Aplicaciones Web y JavaScript</div>
+      <h2 class="section-title">GAMECLASS Web App — Firebase + Tailwind CSS</h2>
+    </div>
+  </div>
+
+  <p>GAMECLASS es el sitio web corporativo del estudio, construido como una <strong>aplicación web estática multi-página (MPA)</strong> con Tailwind CSS y Firebase como backend (autenticación + Firestore en tiempo real).</p>
+
+  <h3>6.1 Estructura del Proyecto</h3>
+
+  <pre>/
+├── index.html        → Página de inicio (reloj, clima simulado)
+├── quienes-somos.html → Misión, Visión y Valores
+├── servicios.html    → Catálogo público de servicios
+├── clientes.html     → Área privada (Firebase Auth + compras)
+├── contacto.html     → Formulario + mapa Google Maps (Utrera)
+├── styles.css        → Tema neo-brutalista, modo oscuro
+└── script.js         → Reloj, clima, tema (compartido)</pre>
+
+  <h3>6.2 Tecnologías</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tecnología</th><th>Versión</th><th>Uso</th></tr></thead>
+      <tbody>
+        <tr><td>HTML5</td><td>—</td><td>Estructura de páginas</td></tr>
+        <tr><td>Tailwind CSS</td><td>CDN (latest)</td><td>Estilos utilitarios</td></tr>
+        <tr><td>CSS personalizado</td><td>—</td><td>Tema neo-brutalista, modo oscuro, animaciones</td></tr>
+        <tr><td>JavaScript (ES Modules)</td><td>—</td><td>Lógica de interfaz y Firebase</td></tr>
+        <tr><td>Firebase Auth</td><td>12.12.1</td><td>Login/registro de clientes</td></tr>
+        <tr><td>Firebase Firestore</td><td>12.12.1</td><td>Mensajes y compras</td></tr>
+        <tr><td>Google Fonts (Inter)</td><td>—</td><td>Tipografía principal</td></tr>
+        <tr><td>Google Maps Embed</td><td>—</td><td>Mapa en página de contacto</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.3 Páginas y Funcionalidades</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Página</th><th>Funcionalidad clave</th><th>Implementación</th></tr></thead>
+      <tbody>
+        <tr><td>index.html</td><td>Reloj en tiempo real, clima simulado</td><td><code>setInterval</code> 1000ms · <code>updateWeather()</code></td></tr>
+        <tr><td>quienes-somos.html</td><td>Misión, Visión, Valores</td><td>Estático</td></tr>
+        <tr><td>servicios.html</td><td>Catálogo (sin precios)</td><td>Estático</td></tr>
+        <tr><td>clientes.html</td><td>Auth + compras Firestore</td><td>Firebase Auth + Firestore <code>purchases</code></td></tr>
+        <tr><td>contacto.html</td><td>Formulario + mapa Utrera</td><td>Firestore <code>messages</code> + Google Maps iframe</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.4 Colecciones Firestore</h3>
+
+  <div class="two-col">
+    <div>
+      <h4>Colección: messages</h4>
+      <pre>{
+  "name": "Nombre del remitente",
+  "email": "correo@ejemplo.com",
+  "message": "Contenido",
+  "timestamp": "server timestamp",
+  "status": "new",
+  "read": false
+}</pre>
+    </div>
+    <div>
+      <h4>Colección: purchases</h4>
+      <pre>{
+  "userId": "uid del usuario",
+  "userEmail": "email",
+  "serviceName": "Nombre servicio",
+  "servicePrice": 5000,
+  "purchasedAt": "server timestamp",
+  "status": "pending"
+}</pre>
+    </div>
+  </div>
+
+  <h3>6.5 Sistema de Temas — Modo Oscuro</h3>
+  <p>Controlado por el atributo <code>data-theme="dark"</code> en <code>&lt;body&gt;</code>. Persistido en <code>localStorage</code> con clave <code>gc-theme</code>. Detecta automáticamente la preferencia del SO con <code>prefers-color-scheme</code>.</p>
+
+  <h3>6.6 Clima Simulado (sin API externa)</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Horas</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td>00–05 h</td><td>🌙 Noche tranquila</td></tr>
+        <tr><td>06–11 h</td><td>🌥 Cielo claro</td></tr>
+        <tr><td>12–15 h</td><td>☀️ Soleado</td></tr>
+        <tr><td>16–18 h</td><td>🌤 Tarde tranquila</td></tr>
+        <tr><td>19–23 h</td><td>🌙 Noche tranquila</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-warning">
+    <strong>⚠ Seguridad Firebase</strong>
+    La API Key de Firebase está expuesta en el código cliente, lo cual es habitual en proyectos web con Firebase. La seguridad real debe gestionarse mediante <strong>Firebase Security Rules</strong> en la consola de Firebase, restringiendo escritura en <code>purchases</code> a usuarios autenticados.
+  </div>
+
+  <h3>6.7 Despliegue en Vercel</h3>
+  <ol class="step-list">
+    <li>Instalar la CLI de Vercel: <code>npm install -g vercel</code></li>
+    <li>Autenticarse: <code>vercel login</code> (abre el navegador)</li>
+    <li>Situarse en la carpeta del proyecto desde la terminal de VS Code</li>
+    <li>Primer despliegue: <code>vercel</code> (responder a las preguntas de la CLI)</li>
+  </ol>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- CONCLUSIÓN                                  -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="conclusion" style="background: var(--ink); color: var(--white);">
+  <div class="section-header">
+    <div class="section-number" style="color: rgba(255,255,255,0.08);">✓</div>
+    <div class="section-title-block">
+      <div class="section-module" style="color: var(--accent);">Conclusión</div>
+      <h2 class="section-title" style="color: var(--white);">Resumen del Proyecto</h2>
+    </div>
+  </div>
+
+  <p style="color: rgba(255,255,255,0.7); max-width: 80ch;">El proyecto GameClass integra de forma coherente seis módulos técnicos en torno a una PYME ficticia de desarrollo de videojuegos, demostrando una infraestructura IT completa y funcional:</p>
+
+  <div class="cards-grid" style="margin-top: 1.5rem;">
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: var(--accent);">🖧</div>
+      <h4 style="color: var(--white);">Red LAN escalable</h4>
+      <p style="color: rgba(255,255,255,0.5);">Topología en estrella con switch de 24 puertos, Cat6 y Access Point WiFi WPA2.</p>
+    </div>
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: var(--accent2);">🏢</div>
+      <h4 style="color: var(--white);">Dominio unificado</h4>
+      <p style="color: rgba(255,255,255,0.5);">Active Directory con Samba4 en Ubuntu, clientes Windows y Debian unidos a gameclass.local.</p>
+    </div>
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: var(--accent3);">🛡</div>
+      <h4 style="color: var(--white);">Seguridad multicapa</h4>
+      <p style="color: rgba(255,255,255,0.5);">Firewall iptables, ClamAV, GPO, políticas de contraseñas y backups automáticos diarios.</p>
+    </div>
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: var(--gold);">🌐</div>
+      <h4 style="color: var(--white);">Servicios completos</h4>
+      <p style="color: rgba(255,255,255,0.5);">Apache, SFTP, DNS, Postfix, Dovecot, DHCP — todo integrado y verificado en producción.</p>
+    </div>
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: #7c3aed;">💻</div>
+      <h4 style="color: var(--white);">Web app corporativa</h4>
+      <p style="color: rgba(255,255,255,0.5);">MPA con Firebase, autenticación, Firestore y despliegue en Vercel.</p>
+    </div>
+    <div class="card" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
+      <div class="card-icon" style="background: var(--muted);">🔄</div>
+      <h4 style="color: var(--white);">Automatización</h4>
+      <p style="color: rgba(255,255,255,0.5);">cron en Linux y Programador de tareas en Windows para backups y mantenimiento sin intervención.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="doc-footer">
+  <span>GAMECLASS · Proyecto Intermodular · Mayo 2026</span>
+  <span>Javier V. · Juan B. · Marta G. · Alejandro C.</span>
+  <span>gameclass.local · 192.168.0.0/24</span>
+</footer>
+
+</main>
+</body>
+</html>
